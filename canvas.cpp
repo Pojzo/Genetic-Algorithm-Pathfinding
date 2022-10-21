@@ -1,27 +1,31 @@
 #include <iostream>
-#include <SFML/Graphics.hpp>
+// #include <SFML/Graphics.hpp>
+// its already included in the header
 
 #include "canvas.hpp"
 
-int run()
-{
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+void Canvas::Test() {
+}
 
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
+int Canvas::GetWidth() {
+    return _WINDOW_WIDTH;
+}
 
-        window.clear();
-        window.draw(shape);
-        window.display();
+int Canvas::GetHeight() {
+    return _WINDOW_HEIGHT;
+}
+
+void Canvas::SetCircleRadius(float radius) {
+    if (radius < 0) {
+        std::cerr << "Radius must be positive\n";
+        return;
     }
+    _circleRadius = radius;
+}
 
-    return 0;
+void Canvas::DrawPoint(float pos_x, float pos_y, sf::Color color) {
+    sf::CircleShape shape(_circleRadius);
+    shape.setFillColor(color);
+    shape.setPosition(pos_x, pos_y);
+    draw(shape);
 }

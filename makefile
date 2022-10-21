@@ -4,11 +4,17 @@ TARGET := main
 
 all: main
 
-main: main.o canvas.o
-	$(CC) $(FLAGS) -o $(TARGET) main.o canvas.o
+main: main.o population.o canvas.o agent.o 
+	$(CC) $(FLAGS) -o $(TARGET) main.o population.o canvas.o agent.o
 
-main.o: canvas.hpp
+main.o: canvas.hpp population.hpp
 	$(CC) $(FLAGS) -c main.cpp
 
-canvas.o: canvas.cpp canvas.hpp
+population.o: population.cpp population.hpp canvas.hpp agent.hpp
+	$(CC) $(FLAGS) -c population.cpp
+
+canvas.o: canvas.cpp canvas.hpp agent.hpp
 	$(CC) $(FLAGS) -c canvas.cpp
+
+agent.o: agent.cpp agent.hpp
+	$(CC) $(FLAGS) -c agent.cpp
