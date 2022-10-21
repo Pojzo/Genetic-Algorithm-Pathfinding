@@ -18,7 +18,7 @@ void Population::CreateAgents() {
 
         auto velX = RandFloat(0., 1.);
         auto velY = RandFloat(0., 1.);
-        _agents.push_back(Agent(posX, posY, velX, velY));
+        _agents.push_back(Agent(sf::Vector2f(posX, posY), sf::Vector2f(velX, velY)));
     }
 }
 
@@ -46,6 +46,26 @@ void Population::MoveAgents() {
     }
 }
 
+void Population::CalculateFitness() {
+    for (auto &agent : _agents) {
+        agent.CalculateFitness(_canvas.GetEndPoint());
+        // std::cout << agent._fitnessScore << std::endl;
+    }
+}
+
+void Population::CreateMatingPool() {
+    _matingPool.clear();
+    for (auto agent : _agents) {
+        if (agent.dead) {
+            continue;
+        }
+        for (int i = 0; i < (int) agent._fitnessScore; i++) {
+             _matingPool.push_back(&agent); 
+        }
+    }
+    std::cout << _matingPool.size() << std::endl;
+}
+
 void Population::Simulate() {
     while (_canvas.isOpen() && running) {
         sf::Event event;
@@ -57,8 +77,10 @@ void Population::Simulate() {
         _canvas.clear(sf::Color::White);
         _canvas.DrawStart();
         _canvas.DrawEnd();
-        MoveAgents();
         ShowAgents();
+        MoveAgents();
+        CalculateFitness();
+        CreateMatingPool();
         _canvas.display();
     }
     std::cout << "Koniec\n";

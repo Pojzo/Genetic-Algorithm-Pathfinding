@@ -2,30 +2,34 @@
 #define AGENT_HPP
 
 #include <utility>
+#include <SFML/Graphics.hpp>
 
 class Agent {
 private:
-    float _posX;
-    float _posY;
-    float _velX;
-    float _velY;
-    public:
-        Agent(float posX, float posY, float velX, float velY) :
-            _posX(posX), _posY(posY), _velX(velX), _velY(velY)
-    {};
-        inline float GetPosX() {return _posX;};
-        inline float GetPosY() {return _posY;};
-        inline void SetPosX(float value) { _posX = value;};
-        inline void SetPosY(float value) {_posY = value;};
+    sf::Vector2f _pos;
+    sf::Vector2f _vel;
 
-        inline float GetVelX() {return _velX;};
-        inline float GetVelY() {return _velY;};
-        inline void SetVelX(float value) { _velX = value;};
-        inline void SetVelY(float value) {_velY = value;};
+    public:
+        Agent(sf::Vector2f pos, sf::Vector2f vel) :
+            _pos(pos), _vel(vel)
+    {};
+        inline float GetPosX() {return _pos.x;};
+        inline float GetPosY() {return _pos.y;};
+        inline void SetPosX(float value) { _pos.x = value;};
+        inline void SetPosY(float value) { _pos.y = value;};
+
+        inline float GetVelX() {return _vel.x;};
+        inline float GetVelY() {return _vel.y;};
+        inline void SetVelX(float value) { _vel.x = value;};
+        inline void SetVelY(float value) { _vel.y = value;};
 
         void Move();
         bool InBounds(int, int);
+        float EucDistance(sf::Vector2f, sf::Vector2f);
+        void CalculateFitness(sf::Vector2f);
+
         bool dead = false;
+        float _fitnessScore = 0;
 };
 
 #endif

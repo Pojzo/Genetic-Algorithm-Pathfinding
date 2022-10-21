@@ -24,5 +24,9 @@ class Population {
         void ShowAgents();
         void MoveAgents();
         void Simulate();
+        void CalculateFitness();
+        void CreateMatingPool();
+
+        vector<Agent*> _matingPool;
 };
 #endif

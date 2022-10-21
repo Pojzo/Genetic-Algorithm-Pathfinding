@@ -15,6 +15,14 @@ int Canvas::GetHeight() {
     return _WINDOW_HEIGHT;
 }
 
+sf::Vector2f Canvas::GetEndPoint() {
+    return _endPoint;
+}
+
+sf::Vector2f Canvas::GetStartPoint() {
+    return _startPoint;
+}
+
 void Canvas::SetCircleRadius(float radius) {
     if (radius < 0) {
         std::cerr << "Radius must be positive\n";

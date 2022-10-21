@@ -32,6 +32,8 @@ class Canvas : public RenderWindow {
 
         int GetWidth();
         int GetHeight();
+        sf::Vector2f GetStartPoint();
+        sf::Vector2f GetEndPoint();
         void SetCircleRadius(float);
         void DrawStart();
         void DrawEnd();
