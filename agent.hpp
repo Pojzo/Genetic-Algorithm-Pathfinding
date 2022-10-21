@@ -24,6 +24,8 @@ private:
         inline void SetVelY(float value) {_velY = value;};
 
         void Move();
+        bool InBounds(int, int);
+        bool dead = false;
 };
 
 #endif

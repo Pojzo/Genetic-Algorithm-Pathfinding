@@ -1,7 +1,7 @@
 #include "population.hpp"
 #include <iostream>
 
-template <typename T>
+bool running = true;
 
 inline int RandInt(int a, int b) {
     return ((b - a) * ((int)rand() / RAND_MAX)) + a;
@@ -23,19 +23,31 @@ void Population::CreateAgents() {
 }
 
 void Population::ShowAgents() {
+    int numAlive = 0;
     for (auto agent : _agents) {
-        _canvas.DrawPoint(agent.GetPosX(), agent.GetPosY(), sf::Color(0, 100, 0));
+        // only show those agents who are not dead
+        if (agent.dead == false) {
+            numAlive++;
+            _canvas.DrawPoint(agent.GetPosX(), agent.GetPosY(), sf::Color::Blue);
+        }
+    }
+    if (numAlive == 0) {
+        running = false;        
     }
 }
 
 void Population::MoveAgents() {
     for (auto &agent: _agents) {
         agent.Move(); 
+        // if agent moved outside the bounds, declare him dead
+        if (agent.InBounds(_canvas.GetWidth(), _canvas.GetHeight()) == false) {
+            agent.dead = true; 
+        }
     }
 }
 
 void Population::Simulate() {
-    while (_canvas.isOpen()) {
+    while (_canvas.isOpen() && running) {
         sf::Event event;
         while (_canvas.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
