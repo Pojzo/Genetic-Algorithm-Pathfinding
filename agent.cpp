@@ -19,6 +19,7 @@ void Agent::SetVel(std::pair<float, float> vel) {
     _vel = vel;
 }
 
-void Agent::Print() {
-    std::cout << "pos: " << _pos.first << ", " << _pos.second << "\nvel: " << _vel.first << ", " << _vel.second << std::endl;
+void Agent::Move() {
+    _pos.first += _vel.first;
+    _pos.second += _vel.second;
 }

@@ -19,7 +19,7 @@ private:
         void SetPos(std::pair<float, float>);
         void SetVel(std::pair<float, float>);
 
-        void Print();
+        void Move();
 };
 
 #endif
