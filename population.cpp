@@ -1,26 +1,37 @@
 #include "population.hpp"
 #include <iostream>
 
-// return random pair of values in specified range
-inline std::pair<int, int> RandomPairInt(int low1, int low2, int high1, int high2) {
-    auto randFirst = rand() % (high1 - low1) + low1;
-    auto randSecond = rand() % (high2 - low2) + low2;
-    return {randFirst, randSecond};
+
+template <typename T>
+
+inline int RandInt(int a, int b) {
+    return ((b - a) * ((int)rand() / RAND_MAX)) + a;
+}
+
+inline float RandFloat(float a, float b) {
+    return ((b - a) * ((float)rand() / RAND_MAX)) + a;
 }
 
 void Population::CreateAgents() {
     for (int i = 0; i < _pop_size; i++) {
-        auto pos = RandomPairInt(0, 0, _canvas.GetWidth(), _canvas.GetHeight());
-        auto vel = RandomPairInt(0, 0, 5, 5);
-        Agent agent(pos, vel);
-        _agents.push_back(agent);
+        auto posX = RandFloat(0, _canvas.GetWidth());
+        auto posY = RandFloat(0, _canvas.GetHeight());
+
+        auto velX = RandFloat(0., 1.);
+        auto velY = RandFloat(0., 1.);
+        _agents.push_back(Agent(posX, posY, velX, velY));
     }
 }
 
 void Population::ShowAgents() {
     for (auto agent : _agents) {
-        auto pos = agent.GetPos();
-        _canvas.DrawPoint(pos.first, pos.second, sf::Color(0, 100, 0));
+        _canvas.DrawPoint(agent.GetPosX(), agent.GetPosY(), sf::Color(0, 100, 0));
+    }
+}
+
+void Population::MoveAgents() {
+    for (auto &agent: _agents) {
+        agent.Move(); 
     }
 }
 
@@ -33,7 +44,9 @@ void Population::Simulate() {
             }
         }
         _canvas.clear(sf::Color::White);
+        MoveAgents();
         ShowAgents();
         _canvas.display();
     }
+    std::cout << "Koniec\n";
 }

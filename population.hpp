@@ -18,8 +18,11 @@ class Population {
         Population(Canvas &canvas, int pop_size) :
             _canvas(canvas),
             _pop_size(pop_size) {};
+        inline int RandInt(int, int);
+        inline float rRandFloat(float, float);
         void CreateAgents();
         void ShowAgents();
+        void MoveAgents();
         void Simulate();
 };
 #endif
