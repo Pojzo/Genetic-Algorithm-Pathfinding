@@ -1,7 +1,6 @@
 #include "population.hpp"
 #include <iostream>
 
-
 template <typename T>
 
 inline int RandInt(int a, int b) {
@@ -44,6 +43,8 @@ void Population::Simulate() {
             }
         }
         _canvas.clear(sf::Color::White);
+        _canvas.DrawStart();
+        _canvas.DrawEnd();
         MoveAgents();
         ShowAgents();
         _canvas.display();

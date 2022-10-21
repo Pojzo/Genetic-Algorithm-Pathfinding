@@ -6,11 +6,11 @@
 const int window_width = 640;
 const int window_height = 640;
 const int population_size = 100;
-
-using std::cout;
+const sf::Vector2f startPoint(310, 590);
+const sf::Vector2f endPoint(310, 0);
 
 int main() {
-    Canvas canvas(window_width, window_height);
+    Canvas canvas(window_width, window_height, startPoint, endPoint);
     Population population(canvas, population_size);
     population.CreateAgents();
     population.Simulate();

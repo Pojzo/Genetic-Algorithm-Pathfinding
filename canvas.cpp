@@ -23,6 +23,20 @@ void Canvas::SetCircleRadius(float radius) {
     _circleRadius = radius;
 }
 
+void Canvas::DrawStart() {
+    sf::CircleShape startCircle(25);
+    startCircle.setFillColor(sf::Color::Green);
+    startCircle.setPosition(_startPoint);
+    draw(startCircle);
+}
+
+void Canvas::DrawEnd() {
+    sf::CircleShape endCircle(25);
+    endCircle.setFillColor(sf::Color::Red);
+    endCircle.setPosition(_endPoint);
+    draw(endCircle);
+}
+
 void Canvas::DrawPoint(float pos_x, float pos_y, sf::Color color) {
     sf::CircleShape shape(_circleRadius);
     shape.setFillColor(color);
