@@ -7,22 +7,17 @@
 class Agent {
 private:
     sf::Vector2f _pos;
-    sf::Vector2f _vel;
-
+    sf::Vector2f *_moves = NULL;
+    int _numMoves;
+    int _curMove = 0;
     public:
-        Agent(sf::Vector2f pos, sf::Vector2f vel) :
-            _pos(pos), _vel(vel)
+        Agent(sf::Vector2f pos, int numMoves) :
+            _pos(pos),
+            _numMoves(numMoves)
     {};
         inline float GetPosX() {return _pos.x;};
         inline float GetPosY() {return _pos.y;};
-        inline void SetPosX(float value) { _pos.x = value;};
-        inline void SetPosY(float value) { _pos.y = value;};
-
-        inline float GetVelX() {return _vel.x;};
-        inline float GetVelY() {return _vel.y;};
-        inline void SetVelX(float value) { _vel.x = value;};
-        inline void SetVelY(float value) { _vel.y = value;};
-
+        void CreateMoves();
         void Move();
         bool InBounds(int, int);
         float EucDistance(sf::Vector2f, sf::Vector2f);
@@ -30,6 +25,8 @@ private:
 
         bool dead = false;
         float _fitnessScore = 0;
+
+        Agent AgentCopy();
 };
 
 #endif
