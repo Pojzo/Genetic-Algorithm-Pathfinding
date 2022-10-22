@@ -28,7 +28,8 @@ void Population::ShowAgents() {
         }
     }
     if (numAlive == 0) {
-        running = false;        
+        allDead = true;
+        // running = false;        
     }
 }
 
@@ -110,11 +111,10 @@ void Population::Simulate() {
 
             }
             std::cout << "All agents are dead in " << i << " generation\n";
-            return;
-            // Crossover();
-            // Mutate
             CalculateFitness();
             CreateMatingPool();
+            // Crossover();
+            // Mutate
         }
     }
     std::cout << "Koniec\n";

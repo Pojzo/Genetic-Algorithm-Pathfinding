@@ -15,7 +15,6 @@ void Agent::CreateMoves() {
     _moves = new sf::Vector2f[_numMoves];
     for (int i = 0; i < _numMoves; i++) {
         _moves[i] = sf::Vector2f(RandFloat(0., 1.) * (rand() % 2 == 1 ? -1 : 1), RandFloat(0., 1.) * (rand() % 2 == 1 ? -1 : 1));
-        std::cout << _moves[i].x << std::endl;
     }
 }
 
@@ -34,7 +33,8 @@ bool Agent::InBounds(int window_width, int window_height) {
 }
 
 void Agent::CalculateFitness(sf::Vector2f endPoint) {
-    _fitnessScore = 10000 / EucDistance(_pos, endPoint);
+    _fitnessScore = (int) 10000 / EucDistance(_pos, endPoint);
+    std::cout << _fitnessScore << std::endl;
 }
 
 Agent Agent::AgentCopy() {
