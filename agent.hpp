@@ -20,7 +20,6 @@ private:
         void CreateMoves();
         void Move();
         bool InBounds(int, int);
-        float EucDistance(sf::Vector2f, sf::Vector2f);
         void CalculateFitness(sf::Vector2f);
 
         bool dead = false;
