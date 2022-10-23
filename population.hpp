@@ -32,8 +32,9 @@ class Population {
         void CreateMatingPool();
         void Crossover();
         void Mutate();
+        void ResetAgents();
 
-        vector<Agent*> matingPool;
+        vector<int> matingPool;
 
 };
 #endif

@@ -3,6 +3,7 @@
 
 #include <utility>
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 class Agent {
 private:
@@ -17,10 +18,14 @@ private:
     {};
         inline float GetPosX() {return _pos.x;};
         inline float GetPosY() {return _pos.y;};
+        void SetPos(float x, float y);
+        int GetNumMoves() {return _numMoves;};
         void CreateMoves();
         void Move();
         bool InBounds(int, int);
         void CalculateFitness(sf::Vector2f);
+        Agent Crossover(Agent);
+        void Mutate(float);
 
         bool dead = false;
         float _fitnessScore = 0;
