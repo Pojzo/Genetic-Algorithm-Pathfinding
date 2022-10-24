@@ -15,6 +15,7 @@ class Population {
         vector<Agent> _agents;
         float _crossoverRate;
         float _mutationRate;
+        Agent *_bestAgent = NULL;
 
     public:
         Population(Canvas &canvas, int pop_size, float crossoverRate = 0.5, float mutationRate = 0.05) :

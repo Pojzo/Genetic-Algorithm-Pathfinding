@@ -5,6 +5,7 @@
 bool running = true;
 bool allDead = false;
 const int numMoves = 500;
+const bool showBest = false;
 
 void Population::CreateAgents() {
     for (int i = 0; i < _pop_size; i++) {
@@ -16,20 +17,20 @@ void Population::CreateAgents() {
         agent.CreateMoves();
         _agents.push_back(agent);
     }
+    _bestAgent = &_agents[0];
 }
 
 void Population::ShowAgents() {
-    int numAlive = 0;
+    if (showBest) {
+        // std::cout << (*_bestAgent).GetPosX() << std::endl;
+        _canvas.DrawPoint((*_bestAgent).GetPosX(), (*_bestAgent).GetPosY(), sf::Color::Blue);
+        return;
+    }
     for (auto agent : _agents) {
         // only show those agents who are not dead
         if (agent.dead == false) {
-            numAlive++;
             _canvas.DrawPoint(agent.GetPosX(), agent.GetPosY(), sf::Color::Blue);
         }
-    }
-    if (numAlive == 0) {
-        allDead = true;
-        // running = false;        
     }
 }
 
@@ -46,6 +47,13 @@ void Population::MoveAgents() {
         if (agent.InBounds(_canvas.GetWidth(), _canvas.GetHeight()) == false) {
             agent.dead = true; 
         }
+        if (EucDistance(_canvas.GetEndPoint(), sf::Vector2f(agent.GetPosX(), agent.GetPosY())) < 25) {
+            agent.reachedGoal = true;
+            agent.dead = true;
+        }
+    }
+    if (numAlive == 0) {
+        allDead = true;
     }
     // std::cout << "Num alive " << numAlive << std::endl;
 }
@@ -59,16 +67,25 @@ float Population::GetFitnessMax() {
 }
 
 float Population::GetFitnessMean() {
-    return GetFitnessMax() / _pop_size;
+    float sm = 0;
+    for (auto agent : _agents) {
+        sm += agent._fitnessScore;
+    }
+    return sm / _pop_size;
 }
 
 
 void Population::CalculateFitness() {
     fitnessSum = 0;
+    float maxFitness = 0;
     for (auto &agent : _agents) {
         agent.CalculateFitness(_canvas.GetEndPoint());
+        if (agent._fitnessScore > maxFitness) {
+            _bestAgent = &agent;
+        }
         fitnessSum += agent._fitnessScore;
     }
+    std::cout << _bestAgent->GetPosX() << std::endl;
 }
 
 void Population::CreateMatingPool() {
@@ -76,7 +93,7 @@ void Population::CreateMatingPool() {
     int agentNum = 0;
     for (auto agent : _agents) {
         for (int i = 0; i < (int) agent._fitnessScore; i++) {
-             matingPool.push_back(agentNum); 
+            matingPool.push_back(agentNum); 
         }
         agentNum++;
     }

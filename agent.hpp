@@ -28,6 +28,7 @@ private:
         void Mutate(float);
 
         bool dead = false;
+        bool reachedGoal = false;
         float _fitnessScore = 0;
 
         Agent AgentCopy();
