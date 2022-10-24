@@ -5,7 +5,7 @@
 
 const int window_width = 640;
 const int window_height = 640;
-const int population_size = 100;
+const int population_size = 1000;
 const sf::Vector2f startPoint(310, 590);
 const sf::Vector2f endPoint(310, 0);
 

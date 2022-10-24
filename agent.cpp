@@ -3,6 +3,8 @@
 #include <math.h>
 #include <iostream>
 
+const int velMax = 10;
+
 void Agent::SetPos(float x, float y) {
     _pos.x = x;
     _pos.y = y;
@@ -19,7 +21,7 @@ void Agent::Move() {
 void Agent::CreateMoves() {
     _moves = new sf::Vector2f[_numMoves];
     for (int i = 0; i < _numMoves; i++) {
-        _moves[i] = sf::Vector2f(RandFloat(0., 1.) * (rand() % 2 == 1 ? -1 : 1), RandFloat(0., 1.) * (rand() % 2 == 1 ? -1 : 1));
+        _moves[i] = sf::Vector2f(RandFloat(0., velMax) * (rand() % 2 == 1 ? -1 : 1), RandFloat(0., velMax) * (rand() % 2 == 1 ? -1 : 1));
     }
 }
 
@@ -29,8 +31,7 @@ bool Agent::InBounds(int window_width, int window_height) {
 }
 
 void Agent::CalculateFitness(sf::Vector2f endPoint) {
-    auto fit = 10000 / EucDistance(_pos, endPoint);
-    _fitnessScore = pow(fit, 4);
+    _fitnessScore = 1. / pow(EucDistance(_pos, endPoint), 2);
 }
 
 Agent Agent::Crossover(Agent secondParent) {
@@ -50,7 +51,7 @@ Agent Agent::Crossover(Agent secondParent) {
 void Agent::Mutate(float mutationRate) {
     for (int i = 0; i < _numMoves; i++) {
         if (RandFloat(0, 1) < mutationRate) {
-            _moves[i] = sf::Vector2f(RandFloat(0., 1.) * (rand() % 2 == 1 ? -1 : 1), RandFloat(0., 1.) * (rand() % 2 == 1 ? -1 : 1));
+            _moves[i] = sf::Vector2f(RandFloat(0., velMax) * (rand() % 2 == 1 ? -1 : 1), RandFloat(0., velMax) * (rand() % 2 == 1 ? -1 : 1));
         }
     }
 }

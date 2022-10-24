@@ -26,15 +26,18 @@ class Population {
         void CreateAgents();
         void ShowAgents();
         void MoveAgents();
-        void Simulate();
+        float GetFitnessMax();
+        float GetFitnessMean();
 
         void CalculateFitness();
+        void Simulate();
         void CreateMatingPool();
         void Crossover();
+        Agent SelectParent();
         void Mutate();
         void ResetAgents();
 
         vector<int> matingPool;
-
+        float fitnessSum = 0;
 };
 #endif

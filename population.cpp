@@ -4,7 +4,7 @@
 
 bool running = true;
 bool allDead = false;
-const int numMoves = 300;
+const int numMoves = 500;
 
 void Population::CreateAgents() {
     for (int i = 0; i < _pop_size; i++) {
@@ -34,21 +34,40 @@ void Population::ShowAgents() {
 }
 
 void Population::MoveAgents() {
+    int numAlive = 0;
     for (auto &agent: _agents) {
         if (agent.dead) {
             continue;
         }
+        numAlive++;
+        // std::cout << agent.GetPosX() << " " << agent.GetPosY() << std::endl;
         agent.Move(); 
         // if agent moved outside the bounds, declare him dead
         if (agent.InBounds(_canvas.GetWidth(), _canvas.GetHeight()) == false) {
             agent.dead = true; 
         }
     }
+    // std::cout << "Num alive " << numAlive << std::endl;
 }
 
+float Population::GetFitnessMax() {
+    float fitness = 0;
+    for (auto agent :  _agents) {
+        fitness += agent._fitnessScore;
+    }
+    return fitness;
+}
+
+float Population::GetFitnessMean() {
+    return GetFitnessMax() / _pop_size;
+}
+
+
 void Population::CalculateFitness() {
+    fitnessSum = 0;
     for (auto &agent : _agents) {
         agent.CalculateFitness(_canvas.GetEndPoint());
+        fitnessSum += agent._fitnessScore;
     }
 }
 
@@ -68,30 +87,32 @@ void Population::Crossover() {
     std::cout << "Mating pool size  " << matingPool.size() << std::endl;
     for (long unsigned int i = 0; i < _agents.size(); i++) {
         if (RandFloat(0, 1) < _crossoverRate) {
-            /*
-            int firstIndex = RandInt(0, matingPool.size());
-            int secondIndex = RandInt(0, matingPool.size());
-            Agent firstParent = _agents[matingPool[firstIndex]];
-            Agent secondParent = _agents[matingPool[secondIndex]];
-            Agent child = firstParent.Crossover(secondParent);
-            newAgents.push_back(child);
-            */
-            int index = RandInt(0, matingPool.size());
-            newAgents.push_back(_agents[matingPool[index]].AgentCopy());
+            Agent agent = SelectParent();
+            newAgents.push_back(agent);
         }
         else {
-            // int parentIndex = RandInt(0, matingPool.size());
-            // Agent agentCopy = _agents[matingPool[parentIndex]].AgentCopy();
-            // newAgents.push_back(agentCopy);
             newAgents.push_back(_agents[i].AgentCopy());
         }
     }
     std::copy(newAgents.begin(), newAgents.end(), _agents.begin());
     // std::cout << _agents.size() << std::endl;
 }
+
+Agent Population::SelectParent() {
+    float rand = RandFloat(0, fitnessSum);  
+    float runningSum = 0;
+    for (int i = 0; i < _pop_size; i++) {
+        runningSum += _agents[i]._fitnessScore; 
+        if (runningSum > rand) {
+            return _agents[i].AgentCopy(); 
+        }
+    }
+    return _agents[_pop_size - 1].AgentCopy();
+}
+
 void Population::Mutate() {
     for (auto &agent : _agents) {
-        agent.Mutate(0.02);
+        agent.Mutate(0.05);
     }
 }
 
@@ -103,8 +124,9 @@ void Population::ResetAgents() {
     }
 }
 
+
 void Population::Simulate() {
-    const int numGenerations = 10;
+    const int numGenerations = 100;
     while (_canvas.isOpen() && running) {
         for (int i = 0; i < numGenerations; i++) {
             allDead = false;
@@ -126,14 +148,9 @@ void Population::Simulate() {
             }
             std::cout << "All agents are dead in " << i << " generation\n";
             CalculateFitness();
-            float maxFitness = 0;
-            for (auto agent : _agents) {
-                if (agent._fitnessScore > maxFitness) {
-                    maxFitness = agent._fitnessScore;
-                }
-            }
-            std::cout << "Max fitness: " << maxFitness << std::endl;
-            CreateMatingPool();
+            std::cout << "Max fitness: " << GetFitnessMax() << std::endl;
+            std::cout << "Mean fitness: " << GetFitnessMean() << std::endl;
+            // CreateMatingPool();
             Crossover();
             Mutate();
             ResetAgents();
